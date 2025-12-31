@@ -30,13 +30,11 @@ pipeline {
             steps {
                 script {
                     // Get DockerHub username from credentials
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS}") {
-                        def dockerHubUsername = sh(script: 'echo $DOCKER_USERNAME', returnStdout: true).trim()
-                        env.DOCKER_IMAGE = "${dockerHubUsername}/${IMAGE_NAME}:${params.TAG}"
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        env.DOCKER_IMAGE = "${DOCKER_USER}/${IMAGE_NAME}:${params.TAG}"
+                        echo "Building Docker image: ${env.DOCKER_IMAGE}"
+                        sh "docker build -t ${env.DOCKER_IMAGE} ."
                     }
-                    
-                    echo "Building Docker image: ${env.DOCKER_IMAGE}"
-                    sh "docker build -t ${env.DOCKER_IMAGE} ."
                 }
             }
         }
@@ -45,9 +43,11 @@ pipeline {
             steps {
                 script {
                     echo "Pushing ${env.DOCKER_IMAGE} to DockerHub..."
-                    // Use Jenkins Docker plugin for secure authentication
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS}") {
-                        sh "docker push ${env.DOCKER_IMAGE}"
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh """
+                            echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
+                            docker push ${env.DOCKER_IMAGE}
+                        """
                     }
                 }
             }
