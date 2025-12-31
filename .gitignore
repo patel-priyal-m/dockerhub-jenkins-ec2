@@ -16,6 +16,8 @@ Thumbs.db
 .env
 .env.local
 jenkins.properties.local
+jenkins.properties
+
 
 # SSH Keys - NEVER commit these!
 *.pem
