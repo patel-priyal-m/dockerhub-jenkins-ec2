@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Monitor</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #0a0a0a;
+            padding: 30px;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+        }
+        h1 { 
+            color: #00ff00; 
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .status {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 10px 0;
+            background: #0d0d0d;
+            border-left: 4px solid #00ff00;
+        }
+        .status.online { border-left-color: #00ff00; }
+        .label { font-weight: bold; }
+        .value { color: #00ff00; }
+        .timestamp {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Demo App Monitor</h1>
+        
+        <div class="status online">
+            <span class="label">Web App:</span>
+            <span class="value">● ONLINE</span>
+        </div>
+        
+        <div class="status online">
+            <span class="label">Redis Cache:</span>
+            <span class="value">● ONLINE</span>
+        </div>
+        
+        <div class="status online">
+            <span class="label">Monitor:</span>
+            <span class="value">● ONLINE</span>
+        </div>
+        
+        <div class="status online">
+            <span class="label">Deployment:</span>
+            <span class="value">Docker Compose</span>
+        </div>
+        
+        <div class="status online">
+            <span class="label">Environment:</span>
+            <span class="value">Production</span>
+        </div>
+        
+        <div class="timestamp">
+            Last updated: <span id="time"></span>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        setInterval(() => {
+            document.getElementById('time').textContent = new Date().toLocaleString();
+        }, 1000);
+    </script>
+</body>
+</html>

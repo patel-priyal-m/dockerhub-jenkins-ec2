@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Main web application
+  web:
+    build: .
+    image: ${DOCKER_IMAGE:-patelpriyalm/simple-demo-app:latest}
+    container_name: demo-app-web
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - app-network
+    labels:
+      - "app=demo-app"
+      - "tier=frontend"
+
+  # Redis cache (optional - for demonstration)
+  redis:
+    image: redis:alpine
+    container_name: demo-app-redis
+    restart: unless-stopped
+    networks:
+      - app-network
+    labels:
+      - "app=demo-app"
+      - "tier=cache"
+
+  # Health check service (simple status page)
+  monitor:
+    image: nginx:alpine
+    container_name: demo-app-monitor
+    volumes:
+      - ./monitor.html:/usr/share/nginx/html/index.html:ro
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - app-network
+    labels:
+      - "app=demo-app"
+      - "tier=monitoring"
+
+networks:
+  app-network:
+    driver: bridge
+
+# Volumes for persistence (optional)
+volumes:
+  redis-data:
