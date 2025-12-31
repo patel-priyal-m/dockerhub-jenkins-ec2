@@ -12,11 +12,12 @@ Thumbs.db
 # Logs
 *.log
 
-# Environment
+# Environment - DO NOT commit actual credentials!
 .env
 .env.local
+jenkins.properties.local
 
-# SSH Keys
+# SSH Keys - NEVER commit these!
 *.pem
 *.key
 id_rsa*
